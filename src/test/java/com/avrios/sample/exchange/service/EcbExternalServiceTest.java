@@ -1,12 +1,10 @@
 package com.avrios.sample.exchange.service;
 
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -16,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.avrios.sample.exchange.model.DayExchangeRates;
 
+import static com.avrios.sample.exchange.TestUtil.readResourceFile;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.when;
@@ -54,10 +53,5 @@ public class EcbExternalServiceTest {
         });
     }
 
-    private String readResourceFile(final String fileName) throws Exception {
-        try (final InputStream stream = getClass().getResourceAsStream(fileName)) {
-            return IOUtils.toString(stream, "UTF-8");
-        }
-    }
 
 }

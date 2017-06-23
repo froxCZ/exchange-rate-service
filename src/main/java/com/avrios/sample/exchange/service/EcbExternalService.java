@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.validation.constraints.NotNull;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPath;
@@ -32,6 +33,7 @@ public class EcbExternalService {
     @Autowired
     private RestTemplate restTemplate;
 
+    @NotNull
     public DayExchangeRates fetchExchangeRates() throws Exception {
         String resource = restTemplate.getForObject(
                 "http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml",
@@ -39,6 +41,7 @@ public class EcbExternalService {
         return parseXmlToExchangeMap(resource);
     }
 
+    @NotNull
     private DayExchangeRates parseXmlToExchangeMap(String string) throws Exception {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();

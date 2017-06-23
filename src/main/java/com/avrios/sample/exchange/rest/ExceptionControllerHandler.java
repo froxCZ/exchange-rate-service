@@ -14,7 +14,7 @@ import com.avrios.sample.exchange.repository.ExchangeRepository;
 public class ExceptionControllerHandler {
     @ExceptionHandler(value = {ExchangeRepository.ExchangeRateNotFound.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public Map<String, String> accessDenied(ExchangeRepository.ExchangeRateNotFound e) {
+    public Map<String, String> rateNotFound(ExchangeRepository.ExchangeRateNotFound e) {
         Map<String, String> responseBody = new HashMap<>();
         responseBody.put("message", e.getMessage());
         return responseBody;

@@ -20,9 +20,10 @@ public class ExchangeRateController {
     @Autowired
     ExchangeService exchangeService;
 
-    @RequestMapping(path = "/EUR/{currency}", method = RequestMethod.GET)
+    @RequestMapping(path = "/exchange-rate/EUR/{currency}", method = RequestMethod.GET)
     public ExchangeRate getExchangeRate(@PathVariable(value = "currency") String currency,
-                                        @RequestParam(value = "date",required = false) @DateTimeFormat(pattern = DateUtil.DATE_FORMAT) Date date) {
+                                        @RequestParam(value = "date", required = false)
+                                        @DateTimeFormat(pattern = DateUtil.DATE_FORMAT) Date date) {
         return exchangeService.getExchangeRate(currency, date);
     }
 
