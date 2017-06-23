@@ -56,7 +56,6 @@ public class ExchangeServiceTest {
                 .thenReturn(dayExchangeRates);
         fixture.fetchExchangeRates();
 
-
         ArgumentCaptor<DayExchangeRates> exchangeRatesCaptor = ArgumentCaptor.forClass(DayExchangeRates.class);
         verify(exchangeRepository, times(1)).setDayExchangeRates(exchangeRatesCaptor.capture());
 

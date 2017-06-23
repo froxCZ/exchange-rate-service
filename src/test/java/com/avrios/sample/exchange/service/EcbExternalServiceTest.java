@@ -1,6 +1,5 @@
 package com.avrios.sample.exchange.service;
 
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -14,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.avrios.sample.exchange.model.DayExchangeRates;
 
+import static com.avrios.sample.exchange.TestUtil.parseDate;
 import static com.avrios.sample.exchange.TestUtil.readResourceFile;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -34,9 +34,8 @@ public class EcbExternalServiceTest {
 
         DayExchangeRates ratesTable = fixture.fetchExchangeRates();
 
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         for (Object[] testCase : testCases()) {
-            Date date = formatter.parse((String) testCase[0]);
+            Date date = parseDate((String) testCase[0]);
             assertThat(ratesTable.get(date).get(testCase[1]), is((double) testCase[2]));
         }
     }
