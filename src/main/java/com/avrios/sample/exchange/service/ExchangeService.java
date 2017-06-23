@@ -1,12 +1,17 @@
 package com.avrios.sample.exchange.service;
 
+import java.util.Date;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.avrios.sample.exchange.model.DayExchangeRates;
+import com.avrios.sample.exchange.model.ExchangeRate;
 import com.avrios.sample.exchange.repository.ExchangeRepository;
 
+@Service
 public class ExchangeService {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
@@ -29,7 +34,9 @@ public class ExchangeService {
         }
     }
 
-
+    public ExchangeRate getExchangeRate(String currency, Date date) {
+        return exchangeRepository.getExchangeRateOnDay(currency, date);
+    }
 
 
 }
