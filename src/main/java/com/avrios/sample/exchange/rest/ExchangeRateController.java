@@ -21,8 +21,8 @@ public class ExchangeRateController {
     ExchangeService exchangeService;
 
     @RequestMapping(path = "/EUR/{currency}", method = RequestMethod.GET)
-    public ExchangeRate updateContact(@PathVariable(value = "currency") String currency,
-                                      @RequestParam("date") @DateTimeFormat(pattern = DateUtil.DATE_FORMAT) Date date) {
+    public ExchangeRate getExchangeRate(@PathVariable(value = "currency") String currency,
+                                        @RequestParam(value = "date",required = false) @DateTimeFormat(pattern = DateUtil.DATE_FORMAT) Date date) {
         return exchangeService.getExchangeRate(currency, date);
     }
 
