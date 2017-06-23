@@ -20,7 +20,7 @@ public class IntegrationTest {
     TestRestTemplate restTemplate;
 
     @Test
-    public void test() throws InterruptedException {
+    public void basicTest() throws InterruptedException {
 
         Thread.sleep(3000);//wait for fetching data from mocked ecb service
 

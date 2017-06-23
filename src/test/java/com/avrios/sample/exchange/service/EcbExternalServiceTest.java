@@ -9,6 +9,8 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import com.avrios.sample.exchange.model.DayExchangeRates;
@@ -29,8 +31,11 @@ public class EcbExternalServiceTest {
 
     @Test
     public void fetchExchangeRates() throws Exception {
-        when(restTemplate.getForObject("http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml", String.class))
-                .thenAnswer(i -> readResourceFile("/eurofxref-hist-90d.xml"));
+        when(restTemplate.getForEntity("http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml", String.class))
+                .thenAnswer(i -> new ResponseEntity<String>(
+                        readResourceFile("/eurofxref-hist-90d.xml"),
+                        HttpStatus.OK)
+                );
 
         DayExchangeRates ratesTable = fixture.fetchExchangeRates();
 

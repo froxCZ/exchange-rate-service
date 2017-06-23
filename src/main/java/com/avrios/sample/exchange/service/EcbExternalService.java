@@ -14,6 +14,8 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.w3c.dom.Document;
@@ -34,21 +36,31 @@ public class EcbExternalService {
     @Autowired
     private RestTemplate restTemplate;
 
+    /**
+     * Fetches exchange rates from ECB api.
+     */
     @NotNull
     public DayExchangeRates fetchExchangeRates() throws Exception {
-        String resource = restTemplate.getForObject(
+        ResponseEntity<String> response = restTemplate.getForEntity(
                 URL_90_DAYS,
                 String.class);
-        return parseXml(resource);
+        if (!response.getStatusCode().equals(HttpStatus.OK)) {
+            throw new RuntimeException("Received " + response.getStatusCode().value() +
+                    " status code from ECB api.");
+        }
+        return parse90DaysXml(response.getBody());
     }
 
+    /**
+     * Parses XML from ECB service with data for 90 days.
+     */
     @NotNull
-    private DayExchangeRates parseXml(String string) throws Exception {
+    private DayExchangeRates parse90DaysXml(String xml) throws Exception {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
 
         Document document = null;
-        document = builder.parse(new InputSource(new ByteArrayInputStream(string.getBytes())));
+        document = builder.parse(new InputSource(new ByteArrayInputStream(xml.getBytes())));
         document.getDocumentElement().normalize();
         XPath xpath = XPathFactory.newInstance().newXPath();
 

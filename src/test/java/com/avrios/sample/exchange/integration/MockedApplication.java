@@ -4,6 +4,8 @@ import org.mockito.Mockito;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import com.avrios.sample.exchange.Application;
@@ -20,8 +22,11 @@ public class MockedApplication extends Application {
     @Bean
     public RestTemplate restTemplate() {
         RestTemplate restTemplate = Mockito.mock(RestTemplate.class);
-        when(restTemplate.getForObject("http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml", String.class))
-                .thenAnswer(i -> readResourceFile("/eurofxref-hist-90d.xml"));
+        when(restTemplate.getForEntity("http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml", String.class))
+                .thenAnswer(i -> new ResponseEntity<String>(
+                        readResourceFile("/eurofxref-hist-90d.xml"),
+                        HttpStatus.OK)
+                );
         return restTemplate;
     }
 }
