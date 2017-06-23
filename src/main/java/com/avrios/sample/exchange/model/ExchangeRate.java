@@ -1,6 +1,7 @@
 package com.avrios.sample.exchange.model;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class ExchangeRate {
     Date date;
@@ -23,5 +24,20 @@ public class ExchangeRate {
 
     public double getRate() {
         return rate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ExchangeRate that = (ExchangeRate) o;
+        return Double.compare(that.getRate(), getRate()) == 0 &&
+                Objects.equals(getDate(), that.getDate()) &&
+                Objects.equals(getCurrency(), that.getCurrency());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getDate(), getCurrency(), getRate());
     }
 }

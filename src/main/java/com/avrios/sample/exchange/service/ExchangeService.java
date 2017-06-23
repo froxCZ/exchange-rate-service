@@ -24,6 +24,9 @@ public class ExchangeService {
 
     private boolean fetching = false;
 
+    /**
+     * Fetch exchange rates until succeeded.
+     */
     public void fetchExchangeRates() {
         if (fetching) {//loop is already running
             return;
