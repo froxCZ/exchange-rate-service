@@ -16,6 +16,9 @@ import com.avrios.sample.exchange.model.ExchangeRate;
 public class ExchangeRepository {
 
     private DayExchangeRates dayExchangeRates;
+    /**
+     * Latest date available.
+     */
     private Date latestDate;
 
     /**
@@ -23,8 +26,7 @@ public class ExchangeRepository {
      */
     @NotNull
     public ExchangeRate getExchangeRateOnDay(@NotNull String currency, @Nullable Date date) {
-        /*TODO: consider exception if data were not updated for certain time especially when querying 'today'.
-        */
+        //TODO: consider exception if data were not updated for certain time especially when date is null (=today).
         DayExchangeRates dayExchangeRates = Optional
                 .ofNullable(this.dayExchangeRates)
                 .orElseThrow(() -> new ExchangeRateNotFound("Exchange rates are not available yet. Try again later."));

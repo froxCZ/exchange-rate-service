@@ -26,10 +26,10 @@ public class ExchangeService {
     private boolean fetching = false;
 
     @Value("${ecbService.retryTimeout}")
-    private int ecbServiceRetryTimeout;
+    private volatile int ecbServiceRetryTimeout;
 
     /**
-     * Fetch exchange rates until succeeded.
+     * Tries to fetch exchange rates from ECB until it succeeds. Result is save to ExchangeRepository.
      */
     public void fetchExchangeRates() {
         if (fetching) {//loop is already running
