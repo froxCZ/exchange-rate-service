@@ -43,6 +43,7 @@ public class EcbExternalServiceTest {
             Date date = parseDate((String) testCase[0]);
             assertThat(ratesTable.get(date).get(testCase[1]), is((double) testCase[2]));
         }
+        assertThat("Weekend should have no data", ratesTable.get(parseDate("2017-06-04")) == null);
     }
 
     private List<Object[]> testCases() {
