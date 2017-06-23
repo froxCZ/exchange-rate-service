@@ -22,16 +22,33 @@ public class ExchangeService {
     @Autowired
     ExchangeRepository exchangeRepository;
 
+    private boolean fetching = false;
 
     public void fetchExchangeRates() {
-        DayExchangeRates exchangeRates = null;
-        try {
-            exchangeRates = ecbExternalService.fetchExchangeRates();
-            exchangeRepository.setDayExchangeRates(exchangeRates);
-        } catch (Throwable e) {
-            //TODO: do few attempts
-            log.error("Failed to get latest exchange rates.", e);
+        if (fetching) {//loop is already running
+            return;
         }
+        fetching = true;
+        while (true) {
+            try {
+                fetchExchangeRatesOnce();
+                log.info("Fetched latest exchange rates.");
+                fetching = false;
+                return;
+            } catch (Throwable e) {
+                log.error("Failed to get latest exchange rates.", e);
+            }
+            try {
+                Thread.sleep(20000);//TODO: make configurable via property file and set to lower value for test.
+            } catch (InterruptedException ignored) {
+
+            }
+        }
+    }
+
+    private void fetchExchangeRatesOnce() throws Exception {
+        DayExchangeRates exchangeRates = ecbExternalService.fetchExchangeRates();
+        exchangeRepository.setDayExchangeRates(exchangeRates);
     }
 
     public ExchangeRate getExchangeRate(String currency, Date date) {

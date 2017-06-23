@@ -41,4 +41,20 @@ public class ExchangeServiceTest {
 
     }
 
+    @Test
+    public void fetchExchangeRatesFailSuccess() throws Exception {
+        DayExchangeRates dayExchangeRates = new DayExchangeRates();
+        when(ecbExternalService.fetchExchangeRates())
+                .thenThrow(new RuntimeException("Exception when processing data"))
+                .thenReturn(dayExchangeRates);
+        fixture.fetchExchangeRates();
+
+
+        ArgumentCaptor<DayExchangeRates> exchangeRatesCaptor = ArgumentCaptor.forClass(DayExchangeRates.class);
+        verify(exchangeRepository, times(1)).setDayExchangeRates(exchangeRatesCaptor.capture());
+
+        assertThat("Exchange rates are different", exchangeRatesCaptor.getValue() == dayExchangeRates);
+
+    }
+
 }
