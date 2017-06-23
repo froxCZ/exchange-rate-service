@@ -4,9 +4,9 @@ import java.util.Date;
 import java.util.Objects;
 
 public class ExchangeRate {
-    Date date;
-    String currency;
-    double rate;
+    private Date date;
+    private String currency;
+    private double rate;
 
     public ExchangeRate(Date date, String currency, double rate) {
         this.date = date;
