@@ -5,6 +5,7 @@ import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.avrios.sample.exchange.model.DayExchangeRates;
@@ -24,6 +25,9 @@ public class ExchangeService {
 
     private boolean fetching = false;
 
+    @Value("${ecbService.retryTimeout}")
+    private int ecbServiceRetryTimeout;
+
     /**
      * Fetch exchange rates until succeeded.
      */
@@ -42,7 +46,7 @@ public class ExchangeService {
                 log.error("Failed to get latest exchange rates.", e);
             }
             try {
-                Thread.sleep(20000);//TODO: make configurable via property file and set to lower value for test.
+                Thread.sleep(ecbServiceRetryTimeout);
             } catch (InterruptedException ignored) {
 
             }

@@ -28,6 +28,7 @@ import static com.avrios.sample.exchange.util.XmlUtil.asList;
 
 @Service
 public class EcbExternalService {
+    public static final String URL_90_DAYS = "http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml";
     private SimpleDateFormat ECB_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
     @Autowired
@@ -36,13 +37,13 @@ public class EcbExternalService {
     @NotNull
     public DayExchangeRates fetchExchangeRates() throws Exception {
         String resource = restTemplate.getForObject(
-                "http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml",
+                URL_90_DAYS,
                 String.class);
-        return parseXmlToExchangeMap(resource);
+        return parseXml(resource);
     }
 
     @NotNull
-    private DayExchangeRates parseXmlToExchangeMap(String string) throws Exception {
+    private DayExchangeRates parseXml(String string) throws Exception {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
 
