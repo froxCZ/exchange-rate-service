@@ -12,6 +12,7 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.w3c.dom.Document;
@@ -28,8 +29,10 @@ import static com.avrios.sample.exchange.util.XmlUtil.asList;
 public class EcbExternalService {
     private SimpleDateFormat ECB_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
+    @Autowired
+    private RestTemplate restTemplate;
+
     public DayExchangeRates fetchExchangeRates() throws Exception {
-        RestTemplate restTemplate = new RestTemplate();
         String resource = restTemplate.getForObject(
                 "http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml",
                 String.class);
@@ -51,7 +54,7 @@ public class EcbExternalService {
             String time = dayNode.getAttributes().getNamedItem("time").getNodeValue();
             Date date = ECB_DATE_FORMAT.parse(time);
             NodeList exchanges = (NodeList) xpath.evaluate(
-                    "//Cube[@currency and @rate]",
+                    "Cube[@currency and @rate]",
                     dayNode,
                     XPathConstants.NODESET);
 
