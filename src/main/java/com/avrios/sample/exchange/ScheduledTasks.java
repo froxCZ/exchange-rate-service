@@ -14,6 +14,6 @@ public class ScheduledTasks {
 
     @Scheduled(fixedRate = 60 * 1000 * 30)
     public void periodicallyFetchExchangeRates() {
-        exchangeService.fetchExchangeRates();
+        new Thread(() -> exchangeService.fetchExchangeRates()).run();//on new thread to not block scheduler thread.
     }
 }

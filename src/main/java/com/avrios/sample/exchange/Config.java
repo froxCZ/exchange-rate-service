@@ -14,5 +14,4 @@ public class Config {
         b.simpleDateFormat(DateUtil.DATE_FORMAT);
         return b;
     }
-
 }
