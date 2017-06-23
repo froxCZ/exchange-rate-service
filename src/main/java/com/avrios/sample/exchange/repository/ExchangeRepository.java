@@ -19,18 +19,17 @@ public class ExchangeRepository {
      * Returns exchange rate for specified date. If date is null, returns latest available exchange rate.
      */
     public ExchangeRate getExchangeRateOnDay(String currency, Date date) {
-        /*TODO: consider exception if no data are available for today with some grace period over midnight, instead
-        of using latest date. Different timezones should also be accounted for.
+        /*TODO: consider exception if data were not updated for certain time especially when querying 'today'.
         */
         date = Optional.ofNullable(date).orElse(latestDate);
         currency = currency.toUpperCase();
         Map<String, Double> rates = dayExchangeRates.get(date);
         if (rates == null) {
-            throw new RuntimeException("No data available for specified date.");
+            throw new ExchangeRateNotFound("No data available for specified date.");
         }
         Double rate = rates.get(currency);
         if (rate == null) {
-            throw new RuntimeException("No exchange rate for specified currency.");
+            throw new ExchangeRateNotFound("No exchange rate for specified currency.");
         }
         return new ExchangeRate(date, currency, rate);
     }
@@ -38,6 +37,13 @@ public class ExchangeRepository {
 
     public void setDayExchangeRates(DayExchangeRates dayExchangeRates) {
         this.dayExchangeRates = dayExchangeRates;
-        this.latestDate = dayExchangeRates.keySet().stream().max(Date::compareTo).get();
+        this.latestDate = dayExchangeRates.keySet().stream().max(Date::compareTo).orElse(null);
+    }
+
+    public static class ExchangeRateNotFound extends RuntimeException {
+        public ExchangeRateNotFound(String message) {
+            super(message);
+        }
+
     }
 }

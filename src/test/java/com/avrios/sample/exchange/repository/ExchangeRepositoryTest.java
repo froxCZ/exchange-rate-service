@@ -3,7 +3,9 @@ package com.avrios.sample.exchange.repository;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -21,6 +23,8 @@ public class ExchangeRepositoryTest {
 
     private ExchangeRepository fixture = new ExchangeRepository();
 
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
     @Test
     public void getExchangeRateOnDay() throws Exception {
@@ -43,9 +47,10 @@ public class ExchangeRepositoryTest {
         expected = new ExchangeRate(formatter.parse("2017-06-18"), CURRENCY2, 48.4);
         assertThat(fixture.getExchangeRateOnDay(CURRENCY2, formatter.parse("2017-06-18")), is(expected));
 
+        thrown.expect(ExchangeRepository.ExchangeRateNotFound.class);
+        fixture.getExchangeRateOnDay("asd", null);
 
     }
-
 
     private HashMap<String, Double> createDayRatesMap(String[] currencies, double[] rates) {
         HashMap<String, Double> ratesMap = new HashMap<>();
